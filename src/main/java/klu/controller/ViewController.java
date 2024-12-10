@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
+import klu.model.Citizen;
 import klu.model.Politician;
+import klu.repository.CitizenRepository;
 import klu.repository.PoliticianRepository;
 
 @Controller
@@ -71,6 +73,30 @@ public class ViewController {
         MV.addObject("lastName", session.getAttribute("lastName"));
         
         MV.setViewName("updatePoliticians");
+        return MV;
+    }
+    
+    @Autowired
+    private CitizenRepository CR;
+
+    @GetMapping("/updateCitizens")
+    public ModelAndView viewCitizens(HttpSession session) {
+        ModelAndView MV = new ModelAndView();
+        
+        // Fetch the list of politicians
+        List<Citizen> citizensList = CR.findAll();
+        
+        // Ensure the list is not empty (debugging step)
+        System.out.println("Citizens List: " + citizensList);
+        
+        // Adding the list of politicians to the model
+        MV.addObject("citizens", citizensList);
+        
+        // Adding firstName and lastName to the model from the session
+        MV.addObject("firstName", session.getAttribute("firstName"));
+        MV.addObject("lastName", session.getAttribute("lastName"));
+        
+        MV.setViewName("updateCitizens");
         return MV;
     }
 

@@ -1,5 +1,7 @@
 package klu.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +23,6 @@ public interface CitizenRepository extends JpaRepository<Citizen, Long> {
     
     @Query("select C from Citizen C where C.username=:uname")
     Citizen findByUsername(@Param("uname") String uname);
+    
+    List<Citizen> findAll();
 }

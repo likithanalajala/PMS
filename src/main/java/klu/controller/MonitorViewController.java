@@ -1,11 +1,16 @@
 package klu.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
+import klu.model.Politician;
+import klu.repository.PoliticianRepository;
 
 @Controller
 @RequestMapping("/monitor")
@@ -59,6 +64,30 @@ public class MonitorViewController {
         MV.addObject("lastName", session.getAttribute("lastName"));
         // Add any other data required for the issues page here
         MV.setViewName("moderatorissues"); // This will map to monitorissues.jsp
+        return MV;
+    }
+    
+    @Autowired
+    private PoliticianRepository politicianRepository;
+
+    @GetMapping("/viewPoliticians")
+    public ModelAndView viewPoliticians(HttpSession session) {
+        ModelAndView MV = new ModelAndView();
+        
+        // Fetch the list of politicians
+        List<Politician> politiciansList = politicianRepository.findAll();
+        
+        // Ensure the list is not empty (debugging step)
+        System.out.println("Politicians List: " + politiciansList);
+        
+        // Adding the list of politicians to the model
+        MV.addObject("politicians", politiciansList);
+        
+        // Adding firstName and lastName to the model from the session
+        MV.addObject("firstName", session.getAttribute("firstName"));
+        MV.addObject("lastName", session.getAttribute("lastName"));
+        
+        MV.setViewName("viewPoliticians");
         return MV;
     }
 }

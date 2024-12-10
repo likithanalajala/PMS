@@ -14,25 +14,32 @@
             flex-direction: column;
             font-family: 'Arial', sans-serif;
             overflow-x: hidden;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
         }
 
-        /* Animated Background */
-        .animated-background {
+        /* Main content container */
+        .content {
+            flex: 1;
+        }
+
+        /* Background parallax effect */
+        .background {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd, #c2e9fb, #d4fc79);
-            background-size: 400% 400%;
-            animation: gradientAnimation 12s infinite;
+            background: url('images/bg5.jpg') no-repeat center center fixed;
+            background-size: cover;
             z-index: -1;
+            animation: parallax 10s infinite linear;
         }
 
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes parallax {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+            100% { transform: translateY(0); }
         }
 
         /* Project Name Section */
@@ -41,32 +48,31 @@
             padding: 50px 0;
             font-size: 3em;
             font-weight: bold;
-            color: #ffffff;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
             font-style: italic;
         }
 
         /* Navigation Bar */
         .navbar {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #ffffff;
+            background-color: rgba(0, 123, 255, 0.7);
+            color: white;
             text-align: center;
             padding: 15px 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         .navbar a {
-            color: #ffffff;
+            color: white;
             text-decoration: none;
             padding: 14px 20px;
             display: inline-block;
             font-size: 18px;
             font-weight: bold;
-            border-radius: 5px;
         }
 
         .navbar a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: #0056b3;
+            border-radius: 5px;
         }
 
         /* Description Section */
@@ -75,11 +81,11 @@
             padding: 40px;
             font-size: 18px;
             background-color: rgba(255, 255, 255, 0.85);
-            color: #333333;
+            color: #495057;
             margin: 20px auto;
             width: 80%;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         /* Windows Section */
@@ -94,31 +100,58 @@
         }
 
         .window {
-            background-color: rgba(255, 255, 255, 0.85);
-            color: #333333;
+            background-color: #28a745;
+            color: white;
             text-align: center;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-            transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+            transition: all 0.4s ease-in-out;
             font-size: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .window:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease-in-out;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        .window:hover:before {
+            width: 0;
+            height: 0;
         }
 
         .window:hover {
-            background-color: rgba(255, 255, 255, 0.95);
-            transform: translateY(-5px);
+            background-color: #218838;
+            transform: translateY(-10px);
         }
 
         .window a {
-            color: inherit;
+            color: white;
             text-decoration: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .window:active {
+            transform: translateY(2px);
         }
 
         /* Footer Section */
         footer {
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #ffffff;
+            background-color: #343a40; /* Dark gray footer */
+            color: white;
             text-align: center;
             padding: 10px 0;
             font-size: 14px;
@@ -142,8 +175,8 @@
 </head>
 <body>
 
-    <!-- Animated Background -->
-    <div class="animated-background"></div>
+    <!-- Background Parallax Effect -->
+    <div class="background"></div>
 
     <!-- Main Content -->
     <div class="content">
@@ -183,7 +216,7 @@
 
     <!-- Footer -->
     <footer>
-        © Copyright 2024 by K L Deemed to be University. All Rights Reserved.
+        © Copyright 2021 by K L Deemed to be University. All Rights Reserved.
     </footer>
 
 </body>

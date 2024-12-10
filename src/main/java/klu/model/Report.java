@@ -8,8 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "issue")
-public class Issue {
+@Table(name = "report")
+public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,14 +26,8 @@ public class Issue {
     @Column(name = "description", nullable = false, length = 500)
     private String description;
     
-    @Column(name = "politician_username", nullable = false)
-    private String politicianUsername;
-    
-    @Column(name = "status", nullable = true)
-    private String status;
-    
-    @Column(name = "citizen_uname", nullable = false)
-    private String citizenUname;
+    @Column(name = "date", nullable = false)
+    private String date;
 
 	public Long getId() {
 		return id;
@@ -75,36 +69,18 @@ public class Issue {
 		this.description = description;
 	}
 
-	public String getPoliticianUsername() {
-		return politicianUsername;
+	public String getDate() {
+		return date;
 	}
 
-	public void setPoliticianUsername(String politicianUsername) {
-		this.politicianUsername = politicianUsername;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getCitizenUname() {
-		return citizenUname;
-	}
-
-	public void setCitizenUname(String citizenUname) {
-		this.citizenUname = citizenUname;
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 	@Override
 	public String toString() {
-		return "Issue [id=" + id + ", title=" + title + ", politicianName=" + politicianName + ", citizenUsername="
-				+ citizenUsername + ", description=" + description + ", politicianUsername=" + politicianUsername
-				+ ", status=" + status + ", citizenUname=" + citizenUname + "]";
+		return "Report [id=" + id + ", title=" + title + ", politicianName=" + politicianName + ", citizenUsername="
+				+ citizenUsername + ", description=" + description + ", date=" + date + "]";
 	}
-
-	
+    
 }

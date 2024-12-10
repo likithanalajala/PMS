@@ -36,17 +36,28 @@ public class UserController {
 		        }
 		}
 		
-		@PostMapping("/signup")
-		public ResponseEntity<String> signUp(@RequestBody User U) {
-		    String result = UM.signUp(U);
-		    
-		    if (result.equals("New user has been added")) {
-		        // Return a success message to trigger redirection in the frontend
-		        return ResponseEntity.ok("User successfully signed up");
-		    } else {
-		        return ResponseEntity.status(400).body(result);
-		    }
-		}
+	    @PostMapping("/signup")
+	    public ResponseEntity<String> signUp(@RequestBody User U) {
+	        // Validate password strength
+	        String password = U.getPassword();
+	        if (!isStrongPassword(password)) {
+	            return ResponseEntity.status(400).body("Password must be at least 8 characters long, contain uppercase letters, lowercase letters, numbers, and special characters.");
+	        }
+
+	        String result = UM.signUp(U);
+	        if (result.equals("New user has been added")) {
+	            return ResponseEntity.ok("User successfully signed up");
+	        } else {
+	            return ResponseEntity.status(400).body(result);
+	        }
+	    }
+
+	    // Password strength validation method
+	    private boolean isStrongPassword(String password) {
+	        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$";
+	        return password.matches(regex);
+	    }
+
 		
 		@GetMapping("/profile")
 		public ModelAndView getProfile(HttpSession session) {

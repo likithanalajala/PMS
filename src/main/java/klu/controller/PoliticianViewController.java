@@ -76,5 +76,33 @@ public class PoliticianViewController {
 
         return MV;
     }
+    
+    @GetMapping("/delete")
+    public ModelAndView showDeletePoliticiansPage() {
+        ModelAndView MV = new ModelAndView();
+        MV.addObject("politicians", PR.findAll()); // Fetch all politicians
+        MV.setViewName("deletePoliticians"); // Map to deletePoliticians.jsp
+        return MV;
+    }
+
+    @GetMapping("/delete/{username}")
+    public ModelAndView deletePolitician(@PathVariable String username) {
+        ModelAndView MV = new ModelAndView();
+        try {
+            Politician politician = PR.findByUsername(username);
+            if (politician != null) {
+                PR.delete(politician); // Delete the politician from the database
+                MV.addObject("successMessage", "Politician deleted successfully!");
+            } else {
+                MV.addObject("errorMessage", "Politician not found!");
+            }
+        } catch (Exception e) {
+            MV.addObject("errorMessage", "An error occurred while deleting the politician.");
+        }
+        MV.addObject("politicians", PR.findAll()); // Fetch updated list of politicians
+        MV.setViewName("deletePoliticians");
+        return MV;
+    }
+
 
 }

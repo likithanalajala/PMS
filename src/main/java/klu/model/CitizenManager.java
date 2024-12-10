@@ -47,4 +47,25 @@ public class CitizenManager {
         return CR.findByUsername(username);
     }
 	
+	// Method to add a citizen
+    public String addCitizen(Citizen citizen) {
+        try {
+            // Validate if the username already exists
+            if (CR.validateUsername(citizen.getUsername()) > 0) {
+                throw new Exception("Username already exists.");
+            }
+
+            // Validate if the email already exists
+            if (CR.validateEmail(citizen.getEmailid()) > 0) {
+                throw new Exception("Email already exists.");
+            }
+
+            // Save the citizen to the database
+            CR.save(citizen);
+            return "Citizen added successfully";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+	
 }

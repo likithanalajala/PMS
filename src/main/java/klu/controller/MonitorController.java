@@ -1,15 +1,21 @@
 package klu.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
 import klu.model.Monitor;
 import klu.model.MonitorManager;
+import klu.model.Report;
+import klu.repository.ReportRepository;
 
 @RestController
 @RequestMapping("/monitor")
@@ -46,4 +52,17 @@ public class MonitorController {
         	 return ResponseEntity.status(400).body(result);
         }
     }
+    
+    @Autowired
+    ReportRepository reportRepository;
+    
+    @GetMapping("/reports")
+    public ModelAndView viewReports() {
+        List<Report> reports = reportRepository.findAll();
+        ModelAndView mav = new ModelAndView("monitorReports");
+        mav.addObject("reports", reports);
+        return mav;
+    }
+    
+    
 }

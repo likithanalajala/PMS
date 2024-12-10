@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
@@ -57,7 +58,7 @@ public class PoliticianController {
     }
     
     @Autowired
-    private IssueRepository issueRepository;
+    IssueRepository issueRepository;
 
     @GetMapping("/viewIssues")
     public String viewIssues(HttpSession session, Model model) {
@@ -119,7 +120,76 @@ public class PoliticianController {
 
         return MV;
     }
+    
+    @GetMapping("/add")
+    public ModelAndView showAddPoliticianForm() {
+        ModelAndView MV = new ModelAndView("addPolitician");
+        return MV;
+    }
 
+    @PostMapping("/add")
+    public ModelAndView addPolitician(
+            @RequestParam String firstname,
+            @RequestParam String lastname,
+            @RequestParam String username,
+            @RequestParam String emailid,
+            @RequestParam String password,
+            @RequestParam String position,
+            @RequestParam String location) {
 
+        // Create and save the politician entity
+        Politician politician = new Politician();
+        politician.setFirstname(firstname);
+        politician.setLastname(lastname);
+        politician.setUsername(username);
+        politician.setEmailid(emailid);
+        politician.setPassword(password);
+        politician.setPosition(position);
+        politician.setLocation(location);
 
+        PR.save(politician);
+
+        // Pass success message to the ModelAndView
+        ModelAndView MV = new ModelAndView("addPolitician");
+        MV.addObject("successMessage", "Politician added successfully!");
+
+        return MV;
+    }
+    
+    // Method to show the post status form
+    @GetMapping("/postStatus")
+    public ModelAndView showPostStatusPage() {
+        ModelAndView MV = new ModelAndView("postStatus");  // Name of your JSP view
+        // Fetch all issues from the database
+        List<Issue> issues = issueRepository.findAll();  // Fetch issues from the DB
+        // Add the issues list to the ModelAndView object
+        MV.addObject("issues", issues);
+
+        return MV;  // Return the ModelAndView object
+    }
+
+    // Method to handle the post status form submission
+    @PostMapping("/postStatus")
+    public String postStatus(@RequestParam String politicianUsername,
+                             @RequestParam String issueTitle,
+                             @RequestParam String status,
+                             HttpSession session, Model model) {
+        
+        // Retrieve the issue based on the title
+        Issue issue = issueRepository.findByTitle(issueTitle);
+        
+        if (issue == null) {
+            model.addAttribute("errorMessage", "Issue with the specified title not found.");
+            return "postStatus";  // Return to postStatus.jsp
+        }
+
+        // Update the status of the issue
+        issue.setStatus(status);
+        issue.setPoliticianUsername(politicianUsername);  // Associate with the logged-in politician
+        issueRepository.save(issue);
+
+        // Add success message
+        model.addAttribute("successMessage", "Status updated successfully!");
+        return "postStatus";  // Return to postStatus.jsp
+    }
 }

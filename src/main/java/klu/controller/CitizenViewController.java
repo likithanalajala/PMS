@@ -5,11 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
+import klu.model.Citizen;
 import klu.model.Politician;
+import klu.repository.CitizenRepository;
 import klu.repository.PoliticianRepository;
 
 @Controller
@@ -79,5 +82,55 @@ public class CitizenViewController {
         MV.setViewName("viewPoliticians");
         return MV;
     }
+    
+    @Autowired
+    CitizenRepository CR;
+    
+    @GetMapping("/edit/{username}")
+    public ModelAndView editCitizen(@PathVariable String username) {
+        ModelAndView MV = new ModelAndView();
 
+        // Fetch the politician by username
+        Citizen citizen = CR.findByUsername(username);
+
+        if (citizen != null) {
+            MV.addObject("citizen", citizen);
+            MV.setViewName("editCitizen");
+        } else {
+            MV.addObject("error", "Citizen not found!");
+            MV.setViewName("updateCitizens");
+        }
+
+        return MV;
+    }
+    
+ // Display the delete citizen page with the list of citizens
+    @GetMapping("/delete")
+    public ModelAndView deleteCitizenPage() {
+        ModelAndView MV = new ModelAndView();
+        MV.addObject("citizens", CR.findAll());
+        MV.setViewName("deleteCitizens");
+        return MV;
+    }
+
+    // Delete a citizen based on username
+    @GetMapping("/delete/{username}")
+    public ModelAndView deleteCitizen(@PathVariable String username) {
+        ModelAndView MV = new ModelAndView();
+        try {
+        	Citizen citizen = CR.findByUsername(username);
+            if (citizen != null) {
+                CR.delete(citizen); // Delete the politician from the database
+                MV.addObject("successMessage", "citizen deleted successfully!");
+            } else {
+                MV.addObject("errorMessage", "citizen not found!");
+            }
+        } catch (Exception e) {
+            MV.addObject("errorMessage", "An error occurred while deleting the citizen.");
+        }
+        MV.addObject("citizens", CR.findAll()); // Fetch updated list of politicians
+        MV.setViewName("deleteCitizens");
+        return MV;
+    }
+    
 }
